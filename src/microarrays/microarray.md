@@ -58,3 +58,44 @@ boxplot(log(exprs,base=2))
 ![Box Plot of Log Values](logarithmboxplot.png)
 
 *Box plot of Logarithm values of the microarray expression*
+
+
+## Normalizing data
+```
+normdata <- affy::rma(rawdata)
+normexprs <- exprs(normdata)
+```
+
+## R Matrix
+```
+design <- cbind(c(1, 1, 1, 1, 1, 1), c(0, 0, 0, 1, 1, 1))
+design
+#[, 1] [, 2]
+#[1, ] 1 0
+#[2, ] 1 0
+#[3, ] 1 0
+#[4, ] 1 1
+#[5, ] 1 1
+#[6, ] 1 1
+```
+
+## Differential expression
+
+### Design Matrix
+```
+design <- cbind(c(1,1,1,1,1,1),c(0,0,0,1,1,1))
+```
+* The first column is intercept
+* The second column indicates whether the corresponding microarray profiled samples from side-populations (value = 1) or non-side-population (value = 0)
+
+### Fitting linear models
+```
+rawdata <- affy::ReadAffy()
+exprs <- affy::pm(rawdata)
+normdata <- affy::rma(rawdata)
+normexprs <- affy::exprs(normdata)
+design <- cbind(c(1,1,1,1,1,1),c(0,0,0,1,1,1))
+fit <- limma::lmFit(normexprs, design)
+fit <- limma::eBayes(fit)
+```
+

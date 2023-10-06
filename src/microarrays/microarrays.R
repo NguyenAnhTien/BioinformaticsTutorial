@@ -1,10 +1,12 @@
-BiocManager::install("affy")
-library(affy)
 rawdata <- affy::ReadAffy()
-exprs <- pm(rawdata)
-image(rawdata[,1])
-length(exprs)
-ncol(exprs)
-nrow(exprs)
+exprs <- affy::pm(rawdata)
+normdata <- affy::rma(rawdata)
+normexprs <- affy::exprs(normdata)
 
-limma::plotMA(exprs[,c(1,3)])
+design <- cbind(c(1,1,1,1,1,1),c(0,0,0,1,1,1))
+
+samples <- affy::sampleNames(normdata)
+probesets <- affy::featureNames(normdata)
+
+fit <- limma::lmFit(normexprs, design)
+fit <- limma::eBayes(fit)
