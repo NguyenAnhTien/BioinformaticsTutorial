@@ -153,6 +153,12 @@ fit.out$Symbol <- unlist(mget(rownames(fit.out), hgu133plus2.db::hgu133plus2SYMB
 * fit.out is a data frame
 * mget functions look up the gene symbol annotations for each rowname in the fit.out, then add this as an additional column.
 
+```
+topTable(fit,coef=2,adjust="fdr")
+```
+
+* limma::topTable() command return the list of the top differentially-expressed genes for specified coefficients. The *coef* specifies which column of the design matrix to use for the comparison. *adjust* specifies what statistical adjustments should be used to take into account the considerable multiple testing
+
 **Diggin the few of rows of the fit.out**
 
 ```
@@ -182,3 +188,22 @@ fit.out[1:10, c(1, 7, 2:5)]
 ```
 write.table(fit.out,file="fittable.txt",sep="",quote=FALSE,row.names=FALSE)
 ```
+
+## Ploting expression profiles
+
+* if we wished to inspect the expression profile for the most if we wished to inspect the expression profile for the most in the side-population gene expression dataset.
+
+```
+gIndex <- which(featureNames(normdata)=="244829_at")
+plot(normexprs[gIndex,],type="l")
+```
+
+![244829_at Profile](plot_gene_profile.png)
+
+## Clustering and correlation
+
+### Motivation
+
+* finding groups of genes with similar expression levels across a set of samples.
+* finding groups of samples with similar expression levels of certain sets of genes.
+* characterising similarity between elements from a dataset
